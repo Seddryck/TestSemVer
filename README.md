@@ -1,2 +1,2 @@
 # TestSemVer
-Should be 0.6.0
+Should be 0.6.1
