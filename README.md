@@ -1,2 +1,2 @@
 # TestSemVer
-Should be 0.2.2
+Should be 0.3.0
