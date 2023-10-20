@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: bcoe/conventional-release-labels@v1
-      with:
+        with:
           type_labels: '{"feat": "new-feature", "fix": "bugfix", "breaking": "breaking-change"}'
