@@ -25,4 +25,6 @@ before_build:
         Repository = ($env:APPVEYOR_REPO_NAME -Split '/')[1]
         SecretToken = $env:github_access_token
       } | Set-Pull-Request-Expected-Labels
+    } else {
+        Write-Host 'Not a pull request on appveyor. Skipping mapping conventional commits and labels.'
     }
