@@ -15,6 +15,7 @@ before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
 - pwsh: |
     Write-Host "PULL_REQUEST_NUMBER: <$env:APPVEYOR_PULL_REQUEST_NUMBER>"
+    Write-Host "Exists? $(Test-Path -Path $env:APPVEYOR_PULL_REQUEST_NUMBER)"
     $EnvVar = Get-Item -Path $env:APPVEYOR_PULL_REQUEST_NUMBER -ErrorAction SilentlyContinue
     # Check if the environment variable exists
     if ($EnvVar) {
