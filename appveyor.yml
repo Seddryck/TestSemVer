@@ -14,9 +14,6 @@ init:
 before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
 - pwsh: |
-    Write-Host "PULL_REQUEST_NUMBER: <$env:APPVEYOR_PULL_REQUEST_NUMBER>"
-    Write-host $(($env:APPVEYOR -eq "True") -and ($null -ne $env:APPVEYOR_PULL_REQUEST_NUMBER))
-
     . "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
     if (($env:APPVEYOR -eq "True") -and ($null -ne $env:APPVEYOR_PULL_REQUEST_NUMBER)) {
       $context = [PSCustomObject] @{
