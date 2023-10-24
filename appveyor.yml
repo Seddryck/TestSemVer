@@ -15,10 +15,12 @@ before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
 - pwsh: |
     Write-Host "PULL_REQUEST_NUMBER: <$env:APPVEYOR_PULL_REQUEST_NUMBER>"
-    Write-Host "Exists? $($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null)"
-    
+    Write-Host "APPVEYOR_REPO_NAME: <$env:APPVEYOR_REPO_NAME>"
+    Write-Host "REPO  : $(($env:APPVEYOR_REPO_NAME -Split '/')[0])>"
+    Write-Host "BRANCH: $(($env:APPVEYOR_REPO_NAME -Split '/')[1])>"
+
     . "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
-    if ($env:APPVEYOR -eq "True" -and -not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
+    if ($env:APPVEYOR -eq "True" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne $null) {
       $context = [PSCustomObject] @{
         Id = $env:APPVEYOR_PULL_REQUEST_NUMBER
         Owner = "Seddryck"
