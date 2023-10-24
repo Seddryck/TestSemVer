@@ -164,12 +164,3 @@ function Set-Pull-Request-Expected-Labels {
 		Write-Host "Labels already up-to-date."
 	}
 }
-
-if ($env:APPVEYOR -eq "True" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne "") {
-	$context = [PSCustomObject] @{
-		Id = $env:APPVEYOR_PULL_REQUEST_NUMBER
-		Owner = "Seddryck"
-		Repository = "TestSemVer"
-		SecretToken = "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"
-	} | Set-Pull-Request-Expected-Labels
-}
