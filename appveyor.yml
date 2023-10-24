@@ -16,15 +16,16 @@ before_build:
 - pwsh: |
     Write-Host "PULL_REQUEST_NUMBER: <$env:APPVEYOR_PULL_REQUEST_NUMBER>"
     Write-Host "APPVEYOR_REPO_NAME: <$env:APPVEYOR_REPO_NAME>"
-    Write-Host "REPO  : $(($env:APPVEYOR_REPO_NAME -Split '/')[0])>"
-    Write-Host "BRANCH: $(($env:APPVEYOR_REPO_NAME -Split '/')[1])>"
+    Write-host $($null -ne $env:APPVEYOR_PULL_REQUEST_NUMBER)
+    Write-Host "REPO  : $()"
+    Write-Host "BRANCH: $()"
 
     . "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
-    if ($env:APPVEYOR -eq "True" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne $null) {
+    if ($env:APPVEYOR -eq "True" -and $null -ne $env:APPVEYOR_PULL_REQUEST_NUMBER) {
       $context = [PSCustomObject] @{
         Id = $env:APPVEYOR_PULL_REQUEST_NUMBER
-        Owner = "Seddryck"
-        Repository = "TestSemVer"
+        Owner = ($env:APPVEYOR_REPO_NAME -Split '/')[0]
+        Repository = ($env:APPVEYOR_REPO_NAME -Split '/')[1]
         SecretToken = $env:github_access_token
       } | Set-Pull-Request-Expected-Labels
     }
