@@ -15,14 +15,7 @@ before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
 - pwsh: |
     Write-Host "PULL_REQUEST_NUMBER: <$env:APPVEYOR_PULL_REQUEST_NUMBER>"
-    Write-Host "Exists? $(Test-Path -Path $env:APPVEYOR_PULL_REQUEST_NUMBER)"
-    $EnvVar = Get-Item -Path $env:APPVEYOR_PULL_REQUEST_NUMBER -ErrorAction SilentlyContinue
-    # Check if the environment variable exists
-    if ($EnvVar) {
-        Write-host -f Green "Environment variable $variableName exists."
-    } else {
-        Write-host -f Yellow "Environment variable $variableName does not exist."
-    }
+    Write-Host "Exists? $($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null)"
     
     . "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
     if ($env:APPVEYOR -eq "True" -and -not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
