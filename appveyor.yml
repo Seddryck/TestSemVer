@@ -14,8 +14,8 @@ init:
 before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
 - pwsh: |
-    Write-Host $PSScriptRoot
-    . Set-Pull-Request-Expected-Labels.ps1    
+    Write-Host "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
+    . "$env:APPVEYOR_BUILD_FOLDER\Set-Pull-Request-Expected-Labels.ps1"
     if ($env:APPVEYOR -eq "True" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne "") {
       $context = [PSCustomObject] @{
         Id = $env:APPVEYOR_PULL_REQUEST_NUMBER
