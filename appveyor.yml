@@ -1,0 +1,24 @@
+version: build.{build}
+image: Visual Studio 2022
+
+environment:
+  github_access_token:
+    secure: gtEHCUmmDjYfrp/NEe2qUPWqpuhUaH6sH/MxVLyXpqLxktMGzWqZFoQ+IT8N8hSNjEuuAFkwNj57xK4pjCU5aMTzhBcIfr3ZMQPbmjakbHwDa/bRWA2Zo1Nl06Vw6pU9
+
+init:
+- cmd: git config --global core.autocrlf true
+- cmd: setx IGNORE_NORMALISATION_GIT_HEAD_MOVE "1"
+- cmd: RefreshEnv.cmd
+- pwsh: Write-Host "Target branch is '$($env:APPVEYOR_REPO_BRANCH)'"
+
+before_build:
+- cmd: gitversion /output buildserver /verbosity Minimal
+- pwsh: |
+    if ($env:APPVEYOR -eq "True" -and $env:APPVEYOR_PULL_REQUEST_NUMBER -ne "") {
+      $context = [PSCustomObject] @{
+        Id = $env:APPVEYOR_PULL_REQUEST_NUMBER
+        Owner = "Seddryck"
+        Repository = "TestSemVer"
+        SecretToken = $env:github_access_token
+      } | Set-Pull-Request-Expected-Labels
+    }
