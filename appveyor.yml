@@ -1,0 +1,50 @@
+version: build.{build}
+image: Visual Studio 2022
+
+environment:
+  github_access_token:
+    secure: gtEHCUmmDjYfrp/NEe2qUPFbbcrd4WeuifwslktS/WYv76VUKzTALH0+ue5fWrvqBrIdcZRQIr3n2XNiS+qBRQhTKJZDYyysIwMQhL7nMKkwstS22KKCnyMtGGH2qcw+
+init:
+- cmd: git config --global core.autocrlf true
+- cmd: setx IGNORE_NORMALISATION_GIT_HEAD_MOVE "1"
+- cmd: RefreshEnv.cmd
+- pwsh: Write-Host "Target branch is '$($env:APPVEYOR_REPO_BRANCH)'"
+
+
+before_build:
+- cmd: gitversion /output buildserver /verbosity Minimal
+- pwsh: |
+    . "$env:APPVEYOR_BUILD_FOLDER\github.ps1"
+    if (($env:APPVEYOR_REPO_BRANCH -eq "main") -and ($null -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)) {
+      $context = [PSCustomObject] @{
+        Id = $env:APPVEYOR_REPO_COMMIT
+        Owner = ($env:APPVEYOR_REPO_NAME -Split '/')[0]
+        Repository = ($env:APPVEYOR_REPO_NAME -Split '/')[1]
+        SecretToken = $env:github_access_token
+      } 
+      $context.Id = $context | Get-Commit-Associated-Pull-Requests 
+      $context | Set-Pull-Request-Expected-Labels
+    } else {
+        Write-Host 'Not a merge on main built on appveyor. Skipping mapping conventional commits and labels.'
+    }
+build_script:
+- pwsh: Write-Host "Tag is v$($env:GitVersion_SemVer)"
+- pwsh: Write-Host "Name is $(($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)"    
+- pwsh: Write-Host 'Built !!!!'
+
+after_build:
+- pwsh: |
+    . "$env:APPVEYOR_BUILD_FOLDER\github.ps1"
+    if (($env:APPVEYOR_REPO_BRANCH -eq "main") -and ($null -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)) {
+        $context = [PSCustomObject] @{
+        Owner = ($env:APPVEYOR_REPO_NAME -Split '/')[0]
+        Repository = ($env:APPVEYOR_REPO_NAME -Split '/')[1]
+        SecretToken = $env:github_access_token
+      } | Publish-Release `
+            -Tag "v$($env:GitVersion_SemVer)" `
+            -Name "$($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)" `
+            -ReleaseNotes `
+            -DiscussionCategory 'Announcements'
+    } else {
+        Write-Host "No release published on GitHub."
+    }
