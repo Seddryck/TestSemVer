@@ -3,7 +3,7 @@ image: Visual Studio 2022
 
 environment:
   github_access_token:
-    secure: gtEHCUmmDjYfrp/NEe2qUPFbbcrd4WeuifwslktS/WYv76VUKzTALH0+ue5fWrvqBrIdcZRQIr3n2XNiS+qBRQhTKJZDYyysIwMQhL7nMKkwstS22KKCnyMtGGH2qcw+
+    secure: gtEHCUmmDjYfrp/NEe2qUBlC6rQvpmiDLyiJXoDq7WbarYKqEwjACM8ld6UkhAKefK1wLS7i3SIqV1ohz4VvQqvWYww187HD77y/RNEVGCevwDhIA09Gcz3GJTdIgDST
 init:
 - cmd: git config --global core.autocrlf true
 - cmd: setx IGNORE_NORMALISATION_GIT_HEAD_MOVE "1"
