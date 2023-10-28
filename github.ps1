@@ -131,7 +131,7 @@ function Publish-Release {
 					-Repository $context.Repository `
 					-Segments @('releases') `
 					-Headers $($context.SecretToken | Get-GitHub-Headers) `
-					-Body ($body | ConvertTo-Json)
+					-Body $body
 }
 
 function Get-Expected-Labels {
