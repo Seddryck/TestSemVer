@@ -29,10 +29,10 @@ before_build:
         Write-Host 'Not a merge on main built on appveyor. Skipping mapping conventional commits and labels.'
     }
 build_script:
-  - pwsh: Write-Host 'Built !!!!'
+- pwsh: Write-Host 'Built !!!!'
 
-deploy_script:
-  - pwsh: |
+after_deploy:
+- pwsh: |
     . "$env:APPVEYOR_BUILD_FOLDER\github.ps1"
     if (($env:APPVEYOR_REPO_BRANCH -eq "main") -and ($null -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)) {
         $context = [PSCustomObject] @{
