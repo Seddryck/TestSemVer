@@ -32,7 +32,7 @@ build_script:
 - pwsh: Write-Host "Name is $(($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)"    
 - pwsh: Write-Host 'Built !!!!'
 
-after_deploy:
+after_build:
 - pwsh: |
     . "$env:APPVEYOR_BUILD_FOLDER\github.ps1"
     if (($env:APPVEYOR_REPO_BRANCH -eq "main") -and ($null -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)) {
