@@ -9,8 +9,7 @@ init:
 - cmd: setx IGNORE_NORMALISATION_GIT_HEAD_MOVE "1"
 - cmd: RefreshEnv.cmd
 - pwsh: Write-Host "Target branch is '$($env:APPVEYOR_REPO_BRANCH)'"
-- pwsh: Write-Host "Tag is v$($env:GitVersion_SemVer)"
-- pwsh: Write-Host "Name is $($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)"
+
 
 before_build:
 - cmd: gitversion /output buildserver /verbosity Minimal
@@ -29,6 +28,8 @@ before_build:
         Write-Host 'Not a merge on main built on appveyor. Skipping mapping conventional commits and labels.'
     }
 build_script:
+- pwsh: Write-Host "Tag is v$($env:GitVersion_SemVer)"
+- pwsh: Write-Host "Name is $(($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)"    
 - pwsh: Write-Host 'Built !!!!'
 
 after_deploy:

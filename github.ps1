@@ -118,7 +118,11 @@ function Publish-Release {
         [switch] $releaseNotes,
 		[string] $discussionCategory
 	)
-	$body = [PSCustomObject]@{tag_name=$tag, name=$name, generate_release_notes=$releaseNotes}
+	$body = [PSCustomObject]@{
+				tag_name=$tag
+				name=$name
+				generate_release_notes=$releaseNotes
+	}
 	if ($discussionCategory) {
 		$body | Add-Member -MemberType NoteProperty -Name 'discussion_category_name' -Value $discussionCategory
 	}
