@@ -42,7 +42,7 @@ after_build:
         SecretToken = $env:github_access_token
       } | Publish-Release `
             -Tag "v$($env:GitVersion_SemVer)" `
-            -Name "$($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)" `
+            -Name "$(($env:APPVEYOR_REPO_NAME -Split '/')[1]) $($env:GitVersion_SemVer)" `
             -ReleaseNotes `
             -DiscussionCategory 'Announcements'
     } else {
