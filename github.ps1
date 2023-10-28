@@ -121,7 +121,7 @@ function Publish-Release {
 	$body = [PSCustomObject]@{
 				tag_name=$tag
 				name=$name
-				generate_release_notes=$releaseNotes
+				generate_release_notes=$($releaseNotes.IsPresent)
 	}
 	if ($discussionCategory) {
 		$body | Add-Member -MemberType NoteProperty -Name 'discussion_category_name' -Value $discussionCategory
@@ -131,7 +131,7 @@ function Publish-Release {
 					-Repository $context.Repository `
 					-Segments @('releases') `
 					-Headers $($context.SecretToken | Get-GitHub-Headers) `
-					-Body $body
+					-Body ($body | ConvertTo-Json)
 }
 
 function Get-Expected-Labels {
